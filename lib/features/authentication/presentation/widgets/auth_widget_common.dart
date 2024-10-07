@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_hub/config/routes/routes_name.dart';
@@ -13,12 +11,14 @@ import 'package:movie_hub/core/enums/enums.dart';
 import 'package:movie_hub/core/utils/auth_methods.dart';
 import 'package:movie_hub/core/utils/message_show_helper.dart';
 import 'package:movie_hub/features/authentication/presentation/bloc/bloc/auth_bloc.dart';
+import 'package:movie_hub/features/authentication/presentation/widgets/login_or_signup_select_widget.dart';
+import 'package:movie_hub/features/authentication/presentation/widgets/proffession_select_widget.dart';
 
 class AuthWidget extends StatelessWidget {
   const AuthWidget({
     super.key,
     required this.pageType,
-  this.emailController,
+    this.emailController,
     required this.passwordController,
     this.userNameController,
     this.phoneNumberController,
@@ -64,7 +64,7 @@ class AuthWidget extends StatelessWidget {
                   controller: userNameController,
                   textAlign: TextAlign.start,
                 ),
-               pageType == PageType.signUp? kHeight15:zeroMeasuredWidget,
+                pageType == PageType.signUp ? kHeight15 : zeroMeasuredWidget,
                 pageType == PageType.signUp
                     ? TextFieldCommon(
                         hintText: "Enter email",
@@ -82,53 +82,11 @@ class AuthWidget extends StatelessWidget {
                 ),
                 kHeight15,
                 pageType == PageType.signUp
-                    ? TextFieldCommon(
-                        prefix: TextWidgetCommon(
-                          text: "+91",
-                          textColor: kBlack.withOpacity(0.7),
-                        ),
-                        hintText: "Enter phone number",
-                        border: const OutlineInputBorder(),
-                        controller: phoneNumberController,
-                        textAlign: TextAlign.start,
-                      )
+                    ? phoneNumberField(phoneNumberController: phoneNumberController)
                     : zeroMeasuredWidget,
                 kHeight15,
                 pageType == PageType.signUp
-                    ? BlocBuilder<AuthBloc, AuthState>(
-                        builder: (context, state) {
-                          return Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: DropdownButton<UserProffession>(
-                              elevation: 0,
-                              value: state.selectedProffession,
-                              hint: Text(
-                                state.selectedProffession != null
-                                    ? state.selectedProffession!.name
-                                    : "Select Profession",
-                              ),
-                              isExpanded: true,
-                              items: UserProffession.values
-                                  .map((UserProffession profession) {
-                                return DropdownMenuItem<UserProffession>(
-                                  value: profession,
-                                  child: Text(
-                                    profession.name,
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (UserProffession? newValue) {
-                                context.read<AuthBloc>().add(
-                                    SelectProffessionEvent(
-                                        selectedProffession: newValue));
-                              },
-                            ),
-                          );
-                        },
-                      )
+                    ? proffessionSelectWidget()
                     : zeroMeasuredWidget,
                 kHeight15,
                 commonContainerButton(
@@ -151,34 +109,40 @@ class AuthWidget extends StatelessWidget {
                   buttonText: pageType == PageType.login ? "Login" : "SignUp",
                 ),
                 kHeight10,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextWidgetCommon(
-                      text: pageType == PageType.login
-                          ? "Don't have an account?"
-                          : "Already have an account?",
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        if (pageType == PageType.login) {
-                          navigatorKey.currentState
-                              ?.pushNamed(AppRouteName.signUpPage);
-                        } else {
-                          navigatorKey.currentState
-                              ?.pushNamed(AppRouteName.loginPage);
-                        }
-                      },
-                      child: TextWidgetCommon(
-                        text: pageType == PageType.login ? "SignUp" : "Login",
-                      ),
-                    ),
-                  ],
-                )
+                loginOrSignUpSelectWidget(pageType: pageType)
               ],
             );
           }),
         ),
+      ),
+    );
+  }
+
+  Widget phoneNumberField(
+      {required TextEditingController? phoneNumberController}) {
+    return Container(
+      padding: const EdgeInsets.only(left: 10),
+      height: 55,
+      decoration: BoxDecoration(
+          border: Border.all(color: kBlack),
+          borderRadius: BorderRadius.circular(5)),
+      child: Row(
+        children: [
+          TextWidgetCommon(
+            text: "+91",
+            fontSize: 16,
+            textColor: kBlack.withOpacity(0.7),
+          ),
+          kWidth5,
+          Expanded(
+            child: TextFieldCommon(
+              hintText: "Enter phone number",
+              border: InputBorder.none,
+              controller: phoneNumberController,
+              textAlign: TextAlign.start,
+            ),
+          ),
+        ],
       ),
     );
   }

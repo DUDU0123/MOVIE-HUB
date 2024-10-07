@@ -6,10 +6,9 @@ import 'package:movie_hub/core/constants/navigator_key.dart';
 import 'package:movie_hub/core/constants/texts.dart';
 import 'package:movie_hub/core/utils/message_show_helper.dart';
 import 'package:movie_hub/features/authentication/presentation/bloc/bloc/auth_bloc.dart';
-import 'package:movie_hub/features/home/presentation/bloc/movie/movie_bloc.dart';
 
-BlocListener<MovieBloc, MovieState> homeMenu() {
-    return BlocListener<MovieBloc, MovieState>(
+BlocListener<AuthBloc, AuthState> homeMenu() {
+    return BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthInitial) {
               navigatorKey.currentState?.pushNamedAndRemoveUntil(

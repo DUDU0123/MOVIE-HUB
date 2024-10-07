@@ -72,7 +72,7 @@ class AuthMethods {
     if (phoneNumber?.length != 10) {
       MessageShowHelper.showSnackbar(
           context: navigatorKey.currentContext!,
-          snackBarContent: 'Entered phone number is not valid,');
+          snackBarContent: 'Entered phone number is not valid');
     }
     if (emailRegExp.hasMatch(email) &&
         passwordRegExp.hasMatch(password) &&

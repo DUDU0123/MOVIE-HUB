@@ -6,12 +6,12 @@ import 'package:movie_hub/features/home/data/model/movie_model/movie_model.dart'
 import 'package:http/http.dart' as http;
 
 abstract interface class MovieData {
-  Stream<List<MovieModel>> getAllMovies();
+   Future<List<MovieModel>> getAllMovies();
 }
 
 class MovieDataImpl extends MovieData {
   @override
-  Stream<List<MovieModel>> getAllMovies() async* {
+  Future<List<MovieModel>> getAllMovies() async {
     try {
       final genreList = await getAllGenres();
       final response = await http.get(
@@ -26,7 +26,7 @@ class MovieDataImpl extends MovieData {
             )
             .toList();
 
-        yield moviesList;
+        return moviesList;
       } else {
         throw Exception("Something Wrong");
       }

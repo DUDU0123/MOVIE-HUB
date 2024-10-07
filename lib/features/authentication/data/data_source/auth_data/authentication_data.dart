@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:movie_hub/core/enums/enums.dart';
@@ -33,7 +31,6 @@ class AuthenticationDataImpl implements AuthenticationData {
     try {
       final userExists = userBox.values.any((user) =>
           user?.userName == userName && user?.userPassword == userPassword);
-      print(userExists);
       return userExists;
     } catch (e) {
       throw DatabaseException(message: e.toString());
@@ -58,9 +55,9 @@ class AuthenticationDataImpl implements AuthenticationData {
           username: '',
           userpassword: '',
           userProffession: UserProffession.other.name,
-        ), // Return a default UserModel
+        ),
       );
-
+       // Check for existing user by euserName
       final existingUserByUsername = userBox.values.firstWhere(
         (user) => user?.username == userName,
         orElse: () => UserModel(
@@ -69,7 +66,7 @@ class AuthenticationDataImpl implements AuthenticationData {
           username: '',
           userpassword: '',
           userProffession: UserProffession.other.name,
-        ), // Return a default UserModel
+        ),
       );
 
       if (existingUserByEmail!.useremail!.isNotEmpty) {

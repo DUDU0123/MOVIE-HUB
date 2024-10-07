@@ -12,7 +12,7 @@ class MoviesLoadingState extends MovieState{
 
 }
 class MoviesLoadedState extends MovieState {
-  final Stream<List<MovieEntity>> moviesList;
+  final List<MovieEntity> moviesList;
   const MoviesLoadedState({
     required this.moviesList,
   });

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:fpdart/fpdart.dart';
 
 import 'package:movie_hub/core/error/failure.dart';
@@ -13,10 +11,9 @@ class MovieRepositoryImpl implements MovieRepository {
     required this.movieData,
   });
   @override
-  Future<Either<Failure, Stream<List<MovieEntity>>>> getAllMovies() async{
+  Future<Either<Failure, List<MovieEntity>>> getAllMovies() async{
     try {
-      final moviesList = movieData.getAllMovies();
-      log(moviesList.toString());
+      final moviesList = await movieData.getAllMovies();
       return right(moviesList);
     } catch (e) {
       return left(Failure(message:  e.toString()));

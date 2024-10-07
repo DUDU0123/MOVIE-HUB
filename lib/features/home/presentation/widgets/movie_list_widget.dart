@@ -5,7 +5,6 @@ import 'package:movie_hub/core/constants/colors.dart';
 import 'package:movie_hub/core/constants/height_width.dart';
 import 'package:movie_hub/core/end_points/base_urls.dart';
 import 'package:movie_hub/core/utils/message_show_helper.dart';
-import 'package:movie_hub/features/home/domain/entity/movie_entity/movie_entity.dart';
 import 'package:movie_hub/features/home/presentation/bloc/movie/movie_bloc.dart';
 import 'package:movie_hub/features/home/presentation/widgets/movie_home_small_widgets.dart';
 import 'package:movie_hub/features/home/presentation/widgets/movie_short_detail_show_widget.dart';
@@ -29,16 +28,7 @@ class MovieListWidget extends StatelessWidget {
           return commonCircularProgressIndicator();
         }
         if (state is MoviesLoadedState) {
-          return StreamBuilder<List<MovieEntity>>(
-              stream: state.moviesList,
-              builder: (context, snapshot) {
-                if (snapshot.data == null) {
-                  return commonEmptyTextWidget();
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return commonCircularProgressIndicator();
-                }
-                return ListView.separated(
+          return ListView.separated(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   separatorBuilder: (context, index) => kHeight10,
@@ -67,11 +57,11 @@ class MovieListWidget extends StatelessWidget {
                               votesAddingWidget(),
                               movieThumbNail(
                                   image:
-                                      '$kImageBaseUrl${snapshot.data![index].posterPath}'),
+                                      '$kImageBaseUrl${state.moviesList[index].posterPath}'),
                               kWidth10,
                               Expanded(
                                 child: movieShortDetailShowWidget(
-                                    movieData: snapshot.data![index]),
+                                    movieData: state.moviesList[index]),
                               )
                             ],
                           ),
@@ -81,9 +71,8 @@ class MovieListWidget extends StatelessWidget {
                       ),
                     );
                   },
-                  itemCount: snapshot.data!.length,
+                  itemCount: state.moviesList.length,
                 );
-              });
         }
         return commonEmptyTextWidget();
       },

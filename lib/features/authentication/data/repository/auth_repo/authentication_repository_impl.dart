@@ -21,10 +21,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           userName: userName, userPassword: userPassword);
       return right(isLoggedIn);
     } on DatabaseException catch (e) {
-      log(name: "hshac", e.toString());
-      return left(Failure(message: e.toString()));
+      return left(Failure(message: e.message));
     } catch (e) {
-      log(name: "hshac",e.toString());
       return left(Failure(message: e.toString()));
     }
   }
@@ -45,10 +43,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           proffession: proffession);
       return right(isLoggedIn);
     } on DatabaseException catch (e) {
-      log(name: "hshac",e.toString());
-      return left(Failure(message: e.toString()));
+      return left(Failure(message: e.message));
     } catch (e) {
-      log(name: "hshac",e.toString());
       return left(Failure(message: e.toString()));
     }
   }

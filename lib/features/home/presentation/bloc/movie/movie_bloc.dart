@@ -12,24 +12,28 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   final GetAllMoviesUsecase _getAllMoviesUsecase;
   MovieBloc({
     required GetAllMoviesUsecase getAllMoviesUsecase,
-  }) : _getAllMoviesUsecase=getAllMoviesUsecase, super(MovieInitial()) {
+  })  : _getAllMoviesUsecase = getAllMoviesUsecase,
+        super(MovieInitial()) {
     on<GetAllMoviesEvent>(getAllMoviesEvent);
   }
 
   FutureOr<void> getAllMoviesEvent(
-      GetAllMoviesEvent event, Emitter<MovieState> emit)async {
-        emit(MoviesLoadingState());
-        try {
-          final res =  await _getAllMoviesUsecase(
-            params: null,
-          );
-          res.fold((failure) {
-            emit(MoviesErrorState(message: failure.message));
-          }, (moviesList) {
-            emit(MoviesLoadedState(moviesList: moviesList));
-          },);
-        } catch (e) {
-          emit(MoviesErrorState(message: e.toString()));
-        }
-      }
+      GetAllMoviesEvent event, Emitter<MovieState> emit) async {
+    emit(MoviesLoadingState());
+    try {
+      final res = await _getAllMoviesUsecase(
+        params: null,
+      );
+      res.fold(
+        (failure) {
+          emit(MoviesErrorState(message: failure.message));
+        },
+        (moviesList) {
+          emit(MoviesLoadedState(moviesList: moviesList));
+        },
+      );
+    } catch (e) {
+      emit(MoviesErrorState(message: e.toString()));
+    }
+  }
 }
